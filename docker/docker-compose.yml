@@ -8,7 +8,7 @@ services:
       - product-postgres
     build:
       context: ./product-service
-    image: ghcr.io/kingstree/product-service
+    image: product-service
     container_name: "product-service"
     ports:
       - 9001:9001
@@ -28,7 +28,7 @@ services:
 
   product-postgres:
     image: "postgres:14.12"
-    container_name: "polar-postgres"
+    container_name: "product-postgres"
     ports:
       - 5432:5432
     environment:
