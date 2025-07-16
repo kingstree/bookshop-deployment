@@ -5,7 +5,7 @@ services:
 
   product-service:
     depends_on:
-      - product-postgres
+      - bookshop-postgres
     build:
       context: ./product-service
     image: product-service
@@ -20,7 +20,7 @@ services:
       - BPL_DEBUG_ENABLED=true
       - BPL_DEBUG_PORT=8001
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://product-postgres:5432/bookshopdb_product
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://bookshop-postgres:5432/bookshopdb_product
       - SPRING_PROFILES_ACTIVE=testdata
       -
   config-service:
@@ -38,12 +38,13 @@ services:
 
   # Backing Services
 
-  product-postgres:
+  bookshop-postgres:
     image: "postgres:14.12"
-    container_name: "product-postgres"
+    container_name: "bookshop-postgres"
     ports:
       - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=bookshopdb_product
+    volumes:
+      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql

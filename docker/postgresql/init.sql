@@ -1,0 +1,2 @@
+CREATE DATABASE bookshopdb_product;
+CREATE DATABASE bookshopdb_order;
