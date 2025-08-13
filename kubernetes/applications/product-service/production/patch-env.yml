@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+spec:
+  template:
+    spec:
+      containers:
+        - name: product-service
+          env:
+            - name: BPL_JVM_THREAD_COUNT
+              value: "100"
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod

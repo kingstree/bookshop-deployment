@@ -1,0 +1,5 @@
+polar:
+  greeting: Welcome to our book product from a production Kubernetes environment!
+spring:
+  config:
+    import: configtree:/workspace/secrets/*/
