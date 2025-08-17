@@ -246,6 +246,6 @@ services:
     command: -config.file=/etc/tempo-config.yml
     ports:
       - "3110:3100"     # Tempo
-      - "4317:4317"     # OTel
+      - "4317:4317"     # OTel gRPC를 통해 오픈텔레메트리 프로토콜
     volumes:
       - ./observability/tempo/tempo.yml:/etc/tempo-config.yml

@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: bookshop-ui
-          image: bookshop-ui:v1
-          imagePullPolicy: Always
+          image: bookshop-ui:latest
+          imagePullPolicy: IfNotPresent
           lifecycle:
             preStop:
               exec:

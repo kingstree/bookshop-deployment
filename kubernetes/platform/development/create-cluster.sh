@@ -2,7 +2,7 @@
 
 echo "\n📦 Initializing Kubernetes cluster...\n"
 
-minikube start --cpus 2 --memory 4g --driver docker --profile bookshop
+minikube start --cpus 2 --memory 8g --driver docker --profile bookshop
 
 echo "\n🔌 Enabling NGINX Ingress Controller...\n"
 
@@ -46,12 +46,25 @@ while [ $(kubectl get pod -l db=bookshop-postgres | wc -l) -eq 0 ] ; do
   sleep 5
 done
 
-echo "\n⌛ Waiting for PostgreSQL to be ready..."
+echo "\n⌛ Waiting for PostgreSQL to be ready (first attempt)..."
 
-kubectl wait \
+if ! kubectl wait \
   --for=condition=ready pod \
   --selector=db=bookshop-postgres \
-  --timeout=180s
+  --timeout=180s ; then
+  echo "\n⚠️  PostgreSQL not ready in time — applying init-config detach patch..."
+  kubectl patch deploy bookshop-postgres --type=json -p='[
+    {"op":"remove","path":"/spec/template/spec/containers/0/volumeMounts/0"},
+    {"op":"remove","path":"/spec/template/spec/volumes/0"}
+  ]'
+  echo "\n🔁 Restarting PostgreSQL deployment after patch..."
+  kubectl rollout restart deploy/bookshop-postgres
+  echo "\n⌛ Waiting for PostgreSQL to be ready (after patch)..."
+  kubectl wait \
+    --for=condition=ready pod \
+    --selector=db=bookshop-postgres \
+    --timeout=60s
+fi
 
 echo "\n📦 Deploying Redis..."
 
@@ -108,6 +121,6 @@ echo "\n⌛ Waiting for bookshop UI to be ready..."
 kubectl wait \
   --for=condition=ready pod \
   --selector=app=bookshop-ui \
-  --timeout=180s
+  --timeout=10s
 
 echo "\n⛵ Happy Sailing!\n"
