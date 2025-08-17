@@ -118,6 +118,9 @@ done
 
 echo "\n⌛ Waiting for bookshop UI to be ready..."
 
+minikube image load bookshop-ui:latest -p bookshop
+
+
 kubectl wait \
   --for=condition=ready pod \
   --selector=app=bookshop-ui \
