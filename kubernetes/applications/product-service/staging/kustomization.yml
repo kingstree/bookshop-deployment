@@ -15,7 +15,7 @@ configMapGenerator:
 
 images:
   - name: product-service
-    newName: ghcr.io/bookshop/product-service
+    newName: ghcr.io/kingstree/product-service
     newTag: latest
 
 replicas:
