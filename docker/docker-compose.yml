@@ -5,8 +5,8 @@ services:
 
   product-service:
     depends_on:
-      - bookshop-postgres
       - fluent-bit
+      - bookshop-postgres
       - bookshop-keycloak
       - tempo
     build:
@@ -37,10 +37,10 @@ services:
 
   order-service:
     depends_on:
-      - bookshop-postgres
-      - bookshop-rabbitmq
-      - bookshop-keycloak
       - fluent-bit
+      - bookshop-postgres
+      - bookshop-keycloak
+      - bookshop-rabbitmq
     build:
       context: ./order-service
     image: "order-service"
