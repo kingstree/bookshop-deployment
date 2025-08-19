@@ -114,7 +114,8 @@ services:
       - ORDER_SERVICE_URL=http://order-service:9002
       - SPA_URL=http://bookshop-ui:9004
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
-      - SPRING_REDIS_HOST=bookshop-redis
+      #- SPRING_REDIS_HOST=bookshop-redis 버전이슈로 키 변경 ??
+      - SPRING_DATA_REDIS_URL=redis://bookshop-redis:6379
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/realms/bookshop
     logging:
       driver: fluentd
@@ -217,14 +218,14 @@ services:
   loki:
     image: grafana/loki:2.9.8
     container_name: loki
-    depends_on:
-      - fluent-bit
     ports:
       - "3100:3100"
 
   fluent-bit:
     image: grafana/fluent-bit-plugin-loki:2.9.8
     container_name: fluent-bit
+    depends_on:
+      - loki
     ports:
       - "24224:24224"
     environment:
