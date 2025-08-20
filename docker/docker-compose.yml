@@ -29,7 +29,7 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
       - SPRING_DATASOURCE_URL=jdbc:postgresql://bookshop-postgres:5432/bookshopdb_product
       - SPRING_PROFILES_ACTIVE=testdata
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://host.docker.internal:8080/realms/bookshop
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://bookshop-keycloak:8080/realms/bookshop
     logging:
       driver: fluentd
       options:
@@ -61,7 +61,7 @@ services:
       - SPRING_R2DBC_URL=r2dbc:postgresql://bookshop-postgres:5432/bookshopdb_order
       - SPRING_FLYWAY_URL=jdbc:postgresql://bookshop-postgres:5432/bookshopdb_order
       - SPRING_RABBITMQ_HOST=bookshop-rabbitmq
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://host.docker.internal:8080/realms/bookshop
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://bookshop-keycloak:8080/realms/bookshop
     logging:
       driver: fluentd
       options:
@@ -116,7 +116,7 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
       #- SPRING_REDIS_HOST=bookshop-redis 버전이슈로 키 변경 ??
       - SPRING_DATA_REDIS_URL=redis://bookshop-redis:6379
-      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://host.docker.internal:8080/realms/bookshop
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=http://bookshop-keycloak:8080/realms/bookshop
     logging:
       driver: fluentd
       options:
@@ -197,6 +197,9 @@ services:
     environment:
       - KEYCLOAK_ADMIN=user
       - KEYCLOAK_ADMIN_PASSWORD=password
+      - KC_HOSTNAME=bookshop-keycloak
+      - KC_HOSTNAME_STRICT=false
+      - KC_HTTP_ENABLED=true
     ports:
       - 8080:8080
 
