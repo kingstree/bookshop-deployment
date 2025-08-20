@@ -6,8 +6,8 @@ services:
   product-service:
     depends_on:
       - fluent-bit
-      - bookshop-postgres
       - bookshop-keycloak
+      - bookshop-postgres
       - tempo
     build:
       context: ./product-service
@@ -38,8 +38,8 @@ services:
   order-service:
     depends_on:
       - fluent-bit
-      - bookshop-postgres
       - bookshop-keycloak
+      - bookshop-postgres
       - bookshop-rabbitmq
     build:
       context: ./order-service
@@ -154,6 +154,10 @@ services:
       - 9004:9004
     environment:
       - PORT=9004
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: 127.0.0.1:24224
 
   # Backing Services
 
@@ -191,8 +195,8 @@ services:
     volumes:
       - ./keycloak:/opt/keycloak/data/import
     environment:
-      - KEYCLOAK_ADMIN=keycloak
-      - KEYCLOAK_ADMIN_PASSWORD=keycloak
+      - KEYCLOAK_ADMIN=user
+      - KEYCLOAK_ADMIN_PASSWORD=password
     ports:
       - 8080:8080
 
@@ -218,6 +222,8 @@ services:
   loki:
     image: grafana/loki:2.9.8
     container_name: loki
+    depends_on:
+      - fluent-bit
     ports:
       - "3100:3100"
 
